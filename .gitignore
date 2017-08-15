@@ -3,3 +3,5 @@
 ################################################################################
 
 /packages
+/StoryTeller.TestRail.Sync/bin/Debug
+/StoryTeller.TestRail.Sync/obj/Debug
