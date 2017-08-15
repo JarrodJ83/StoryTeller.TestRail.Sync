@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Fclp;
+using Fclp.Internals;
 using Newtonsoft.Json;
 using Serilog;
 using StoryTeller.Model.Persistence;
@@ -16,7 +18,9 @@ namespace StoryTeller.TestRail.Sync
         private static string Username { get; set; }
         private static string Password { get; set; }
         private static string SpecsFolder { get; set; }
+        private static string CredentialsFile { get; set; }
         private static ILogger Logger { get; set; }
+        private const int TestCasesSectionId = 1;
         
         static void Main(string[] args)
         {
@@ -27,18 +31,19 @@ namespace StoryTeller.TestRail.Sync
                 .CreateLogger();
 
             var parser = new FluentCommandLineParser();
-
+            
             parser.Setup<int>("projectid")
                 .Callback(value => ProjectId = value)
                 .Required();
 
             parser.Setup<string>("password")
-                .Callback(value => Password = value)
-                .Required();
+                .Callback(value => Password = value);
 
             parser.Setup<string>("username")
-                .Callback(value => Username = value)
-                .Required();
+                .Callback(value => Username = value);
+
+            parser.Setup<string>("credentialsflie")
+                .Callback(value => CredentialsFile = value);
 
             parser.Setup<string>("testrailurl")
                 .Callback(value => TestRailUrl = value)
@@ -49,6 +54,20 @@ namespace StoryTeller.TestRail.Sync
                 .Required();
 
             parser.Parse(args);
+
+            if (!string.IsNullOrEmpty(CredentialsFile))
+            {
+                if(!File.Exists(CredentialsFile))
+                    throw new Exception("Could not load credentials file");
+
+                List<string> credentialsFile = File.ReadLines(CredentialsFile).ToList();
+
+                if(credentialsFile.Count < 2)
+                    throw new Exception("File is expected to have at least two lines. The first contianing the username and the second containing the password");
+
+                Username = credentialsFile[0];
+                Password = credentialsFile[1];
+            }
 
             Run();
 
@@ -90,7 +109,15 @@ namespace StoryTeller.TestRail.Sync
                     {
                         Logger.Verbose("Adding {SpecName} to TestRail", spec.name);
 
-                        var addCaseRequest = new AddCaseRequest(1, spec.name);
+                        var addCaseRequest = new AddCaseRequest(spec.name);
+
+                        object response = testRailClient.SendPost($"add_case/{TestCasesSectionId}", addCaseRequest);
+
+                        var newCase = JsonConvert.DeserializeObject<Case>(response.ToString());
+
+                        Logger.Verbose("Case {Case} added to TestRail", newCase);
+
+
                     }
                 }
             }
