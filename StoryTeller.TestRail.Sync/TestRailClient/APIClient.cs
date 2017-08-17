@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -79,7 +80,7 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
             return SendRequest("POST", uri, data);
         }
 
-        private object SendRequest(string method, string uri, object data)
+        private object SendRequest(string method, string uri, object data = null)
         {
             string url = this.m_url + uri;
 
@@ -192,6 +193,42 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
             }
 
             return result;
+        }
+
+        public List<Case> GetCases(int projectId)
+        {
+            object result = SendGet($"get_cases/{projectId}");
+
+            return JsonConvert.DeserializeObject<List<Case>>(result.ToString());
+        }
+
+        public List<Section> GetSections(int projectId)
+        {
+            object getSectionsResponse = SendGet($"get_sections/{projectId}");
+            return JsonConvert.DeserializeObject<List<Section>>(getSectionsResponse.ToString());
+        }
+
+        public Case AddCase(AddCaseRequest request)
+        {
+            object response = SendPost($"add_case/{request.section_id}", request);
+
+            return JsonConvert.DeserializeObject<Case>(response.ToString());
+        }
+
+        public Section AddSection(AddSectionRequest request)
+        {
+            object response = SendPost($"add_section/{request.ProjectId}", request.Section);
+            return JsonConvert.DeserializeObject<Section>(response.ToString());
+        }
+
+        public void DeleteCase(int caseId)
+        {
+            SendPost($"delete_case/{caseId}", null);
+        }
+
+        public void DeleteSection(int sectionId)
+        {
+            SendPost($"delete_section/{sectionId}", null);
         }
     }
 }

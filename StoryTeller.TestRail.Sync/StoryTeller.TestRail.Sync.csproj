@@ -112,11 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestRailClient\AddCaseRequest.cs" />
-    <Compile Include="TestRailClient\GetCasesResponse.cs" />
+    <Compile Include="TestRailClient\AddSectionRequest.cs" />
     <Compile Include="TestRailClient\Case.cs" />
     <Compile Include="TestRailClient\APIClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRailClient\Section.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
