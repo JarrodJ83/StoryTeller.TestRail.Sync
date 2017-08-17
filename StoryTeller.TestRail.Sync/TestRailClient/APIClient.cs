@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using Microsoft.Win32.SafeHandles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -109,9 +112,8 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
                 // body.
                 if (data != null)
                 {
-                    byte[] block = Encoding.UTF8.GetBytes(
-                        JsonConvert.SerializeObject(data)
-                    );
+                    var serialized = JsonConvert.SerializeObject(data);
+                    byte[] block = Encoding.UTF8.GetBytes(serialized);
 
                     request.GetRequestStream().Write(block, 0, block.Length);
                 }

@@ -18,8 +18,7 @@ namespace StoryTeller.TestRail.Sync
         private static string SpecsFolder { get; set; }
         private static string CredentialsFile { get; set; }
         private static ILogger Logger { get; set; }
-        private const int TestCasesSectionId = 1;
-
+       
         private static APIClient TestRailClient;
 
         static void Main(string[] args)
@@ -112,7 +111,7 @@ namespace StoryTeller.TestRail.Sync
 
                 ProcessSuitePath(sections, suiteSections);
 
-                int sectionId = suiteSections.Last().id;
+                Section section = suiteSections.Last();
 
                 List<int> caseIds = TestCaseParser.ParseTestCaseIds(spec.name).ToList();
 
@@ -129,23 +128,21 @@ namespace StoryTeller.TestRail.Sync
                         caseIds.First());
 
                     var update = false;
-                    if (existingCase.title != spec.name.Replace($"[C{caseIds.First()}]", "").Trim())
+                    var specName = spec.name.Replace($"C{caseIds.First()}", "").Trim();
+                    if (existingCase.title != specName)
                     {
-                        existingCase.title = spec.name;
-                        update = true;
-                    }
+                        existingCase.title = specName;
 
-                    if (existingCase.section_id != sectionId)
-                    {
-                        existingCase.section_id = sectionId;
-                        update = true;  
-                    }
-
-                    if (update)
-                    {
                         Logger.Verbose("Updating {SpecName} in TestRail", spec.name);
 
                         TestRailClient.UpdateCase(existingCase);
+                    }
+
+                    if (existingCase.section_id != section.id)
+                    {
+                        existingCase.section_id = section.id;
+
+                        Logger.Warning("{SpecName} will need manually moved to Section {@Section} in TestRail. Their API doesn't support moves", spec.name, section);
                     }
                 }
                 else
@@ -155,14 +152,14 @@ namespace StoryTeller.TestRail.Sync
                     Case newCase = TestRailClient.AddCase(new Case
                     {
                         title = spec.name,
-                        section_id = sectionId
+                        section_id = section.id
                     });
                     
                     Logger.Verbose("Case {@Case} added to TestRail", newCase);
 
                     var specFile = File.ReadAllText(spec.Filename);
 
-                    specFile = specFile.Replace(spec.name, $"{spec.name} [C{newCase.id}]");
+                    specFile = specFile.Replace(spec.name, $"{spec.name} C{newCase.id}");
 
                     File.WriteAllText(spec.Filename, specFile);
                 }
@@ -231,8 +228,17 @@ namespace StoryTeller.TestRail.Sync
 
             foreach (Section section in sections)
             {
-                Logger.Warning("Deleting {SectionId}", section.id);
-                TestRailClient.DeleteSection(section.id);
+                try
+                {
+                    Logger.Warning("Deleting {SectionId}", section.id);
+                    TestRailClient.DeleteSection(section.id);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    //throw;
+                }
+               
             }
         }
     }
