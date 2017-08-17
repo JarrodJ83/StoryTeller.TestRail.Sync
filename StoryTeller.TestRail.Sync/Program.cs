@@ -106,16 +106,6 @@ namespace StoryTeller.TestRail.Sync
                 .ToHierarchy();
             
             List<Section> sections = TestRailClient.GetSections(ProjectId);
-
-            //if (!sections.Any())
-            //{
-            //    Section baseSection = TestRailClient.AddSection(new AddSectionRequest(ProjectId, new Section
-            //    {
-            //        name = "RAD"
-            //    }));
-
-            //    sections.Add(baseSection);
-            //}
             
             foreach (var spec in hierarchy.Specifications)
             {
@@ -147,7 +137,7 @@ namespace StoryTeller.TestRail.Sync
 
                     specFile = specFile.Replace(spec.name, $"{spec.name} [C{newCase.id}]");
 
-                    //File.WriteAllText(spec.Filename, specFile);
+                    File.WriteAllText(spec.Filename, specFile);
                 }
             }
         }
