@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Fclp;
 using Fclp.Internals;
 using Newtonsoft.Json;
@@ -42,7 +43,7 @@ namespace StoryTeller.TestRail.Sync
             parser.Setup<string>("username")
                 .Callback(value => Username = value);
 
-            parser.Setup<string>("credentialsflie")
+            parser.Setup<string>("credentialsfile")
                 .Callback(value => CredentialsFile = value);
 
             parser.Setup<string>("testrailurl")
@@ -115,9 +116,13 @@ namespace StoryTeller.TestRail.Sync
 
                         var newCase = JsonConvert.DeserializeObject<Case>(response.ToString());
 
-                        Logger.Verbose("Case {Case} added to TestRail", newCase);
+                        Logger.Verbose("Case {@Case} added to TestRail", newCase);
 
+                        var specFile = File.ReadAllText(spec.Filename);
 
+                        specFile = specFile.Replace(spec.name, $"{spec.name} [C{newCase.id}]");
+
+                        File.WriteAllText(spec.Filename, specFile);
                     }
                 }
             }
