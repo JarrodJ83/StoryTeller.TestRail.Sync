@@ -43,7 +43,7 @@
       <HintPath>..\packages\Microsoft.DotNet.InternalAbstractions.1.0.0\lib\net451\Microsoft.DotNet.InternalAbstractions.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
@@ -73,7 +73,7 @@
       <HintPath>..\packages\StoryTeller.4.3.1\lib\net46\Storyteller.dll</HintPath>
     </Reference>
     <Reference Include="Storyteller.TestRail, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StoryTeller.TestRail.1.0.0\lib\net46\Storyteller.TestRail.dll</HintPath>
+      <HintPath>..\packages\StoryTeller.TestRail.2.0.0\lib\net46\Storyteller.TestRail.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

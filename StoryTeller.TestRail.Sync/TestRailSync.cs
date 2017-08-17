@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Serilog;
 using StoryTeller.Model.Persistence;
 using StoryTeller.TestRail.Sync.TestRailClient;
@@ -57,14 +58,13 @@ namespace StoryTeller.TestRail.Sync
 
                 if (existingCase != null)
                 {
-                    _logger.Verbose("Spec {SpecName} is tied to C{CNumber}", spec.name,
-                        caseIds.First());
+                    _logger.Verbose("Spec {SpecName} is tied to C{CNumber}", spec.name, caseIds.First());
 
-                    var update = false;
-                    var specName = spec.name.Replace($"[C{caseIds.First()}", "").Trim();
-                    if (existingCase.title != specName)
+                    var cleanSpecName = CleanSpecName(spec.name);
+
+                    if (existingCase.title != cleanSpecName)
                     {
-                        existingCase.title = specName;
+                        existingCase.title = cleanSpecName;
 
                         _logger.Verbose("Updating {SpecName} in TestRail", spec.name);
 
@@ -92,11 +92,23 @@ namespace StoryTeller.TestRail.Sync
 
                     var specFile = File.ReadAllText(spec.Filename);
 
-                    specFile = specFile.Replace(spec.name, $"{spec.name} C{newCase.id}");
+                    specFile = specFile.Replace(spec.name, $"{spec.name} [C{newCase.id}]");
 
                     File.WriteAllText(spec.Filename, specFile);
                 }
             }
+        }
+
+        string CleanSpecName(string specName)
+        {
+            var matches = TestCaseParser.TestCaseRegex.Matches(specName);
+
+            foreach (Match match in matches)
+            {
+                specName = specName.Replace(match.Value, string.Empty);
+            }
+
+            return specName.Trim();
         }
 
         public void Purge()
