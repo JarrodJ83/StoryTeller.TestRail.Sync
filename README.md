@@ -5,7 +5,7 @@ Small utility to keep your StoryTeller Specs in sync with your TestRail Cases. A
 The following steps will help you sync your local StoryTeller specs to your TestRail project.
 
 ### Pre-Requisites
-This utility expects all of your StoryTeller specs that link to Cases in TestRail have their "C#" in the name of the spec in the following format: "[C#]". For example "My Spec [C1]" would link to Case C1 in TestRail.
+This utility expects all of your StoryTeller specs that link to Cases in TestRail have their "C#" in the name of the spec in the following format: "[C#]". For example, "My Spec [C1]" would link to Case C1 in TestRail.
 
 ### Syncing
 The sync works by loading all the test cases in the TestRail project and then looking to see if the spec exists as a Case in TestRail. If the case exists the title will be updated if it has changed. Otherwise no update will occur. If the test case does not exist the spec will be added to TestRail and the newly created C# will be appended to the name of your spec and the spec file will be updated.
