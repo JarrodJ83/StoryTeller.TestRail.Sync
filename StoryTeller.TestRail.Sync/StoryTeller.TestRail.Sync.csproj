@@ -111,12 +111,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITestRailSync.cs" />
+    <Compile Include="ITestRailSyncSettings.cs" />
     <Compile Include="TestRailClient\AddSectionRequest.cs" />
     <Compile Include="TestRailClient\Case.cs" />
     <Compile Include="TestRailClient\APIClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestRailClient\Section.cs" />
+    <Compile Include="TestRailSync.cs" />
+    <Compile Include="TestRailSyncSettingsFromArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
