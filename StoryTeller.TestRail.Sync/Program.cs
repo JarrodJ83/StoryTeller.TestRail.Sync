@@ -1,12 +1,8 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Fclp;
-using Fclp.Internals;
-using Newtonsoft.Json;
 using Serilog;
 using StoryTeller.Model.Persistence;
 using StoryTeller.TestRail.Sync.TestRailClient;
