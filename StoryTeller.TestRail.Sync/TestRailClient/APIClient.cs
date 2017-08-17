@@ -208,9 +208,9 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
             return JsonConvert.DeserializeObject<List<Section>>(getSectionsResponse.ToString());
         }
 
-        public Case AddCase(AddCaseRequest request)
+        public Case AddCase(Case testCase)
         {
-            object response = SendPost($"add_case/{request.section_id}", request);
+            object response = SendPost($"add_case/{testCase.section_id}", testCase);
 
             return JsonConvert.DeserializeObject<Case>(response.ToString());
         }
@@ -229,6 +229,11 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
         public void DeleteSection(int sectionId)
         {
             SendPost($"delete_section/{sectionId}", null);
+        }
+
+        public void UpdateCase(Case testCase)
+        {
+            SendPost($"update_case/{testCase.id}", testCase);
         }
     }
 }

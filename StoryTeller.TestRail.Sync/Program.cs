@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -81,7 +82,7 @@ namespace StoryTeller.TestRail.Sync
                 TestRailClient.Password = Password;
 
 
-                Purge();
+                //Purge();
 
                 Run();
 
@@ -115,21 +116,36 @@ namespace StoryTeller.TestRail.Sync
 
                 ProcessSuitePath(sections, suiteSections);
 
+                int sectionId = suiteSections.Last().id;
+
                 List<int> caseIds = TestCaseParser.ParseTestCaseIds(spec.name).ToList();
+
+                Case existingCase = null;
 
                 if (caseIds.Any())
                 {
+                    existingCase = testCases.FirstOrDefault(c => c.id == caseIds.First());
+                }
+
+                if (existingCase != null)
+                {
                     Logger.Verbose("Spec {SpecName} is tied to C{CNumber}. Updating Case in TestRail", spec.name,
                         caseIds.First());
+
+                    existingCase.title = spec.name;
+                    existingCase.section_id = sectionId;
+
+                    Logger.Verbose("Updating {SpecName} in TestRail", spec.name);
                 }
                 else
                 {
                     Logger.Verbose("Adding {SpecName} to TestRail", spec.name);
                     
-                    int sectionId = suiteSections.Last().id;
-                    var addCaseRequest = new AddCaseRequest(spec.name, sectionId);
-
-                    Case newCase = TestRailClient.AddCase(addCaseRequest);
+                    Case newCase = TestRailClient.AddCase(new Case
+                    {
+                        title = spec.name,
+                        section_id = sectionId
+                    });
                     
                     Logger.Verbose("Case {@Case} added to TestRail", newCase);
 

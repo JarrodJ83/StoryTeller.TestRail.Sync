@@ -111,7 +111,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestRailClient\AddCaseRequest.cs" />
     <Compile Include="TestRailClient\AddSectionRequest.cs" />
     <Compile Include="TestRailClient\Case.cs" />
     <Compile Include="TestRailClient\APIClient.cs" />
