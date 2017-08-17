@@ -129,13 +129,28 @@ namespace StoryTeller.TestRail.Sync
 
                 if (existingCase != null)
                 {
-                    Logger.Verbose("Spec {SpecName} is tied to C{CNumber}. Updating Case in TestRail", spec.name,
+                    Logger.Verbose("Spec {SpecName} is tied to C{CNumber}", spec.name,
                         caseIds.First());
 
-                    existingCase.title = spec.name;
-                    existingCase.section_id = sectionId;
+                    var update = false;
+                    if (existingCase.title != spec.name.Replace($"[C{caseIds.First()}]", "").Trim())
+                    {
+                        existingCase.title = spec.name;
+                        update = true;
+                    }
 
-                    Logger.Verbose("Updating {SpecName} in TestRail", spec.name);
+                    if (existingCase.section_id != sectionId)
+                    {
+                        existingCase.section_id = sectionId;
+                        update = true;  
+                    }
+
+                    if (update)
+                    {
+                        Logger.Verbose("Updating {SpecName} in TestRail", spec.name);
+
+                        TestRailClient.UpdateCase(existingCase);
+                    }
                 }
                 else
                 {
