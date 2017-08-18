@@ -19,6 +19,10 @@ If you don't want to pass your credentials you can also specify a text file that
 
 ```StoryTeller.TestRail.Sync.exe --projectid myProjectId --credentialsfile "c:\myTestRailCreds.txt" --testrailurl "https://yourproject.testrail.net" --specsfolder "C:\MySystem\Specs"```
 
-Lastly, there is a `--purge` flag that can be used **with _extreme_ caution** which will purge all Sections and Cases from the Project in TestRail. This can be handy when testing. If you run the utility with this flag it will require you to confirm before proceeding:
+The `--purge` flag can be used **with _extreme_ caution** to purge all Sections and Cases from the Project in TestRail. This can be handy when testing. If you run the utility with this flag it will require you to confirm before proceeding:
 
 ```StoryTeller.TestRail.Sync.exe --projectid myProjectId --username "username" --password "password" --testrailurl "https://yourproject.testrail.net" --specsfolder "C:\MySystem\Specs" --purge```
+
+The `--baseSectionPath` arguement can be used to specify a base section in which to sync the specs to. This must be specified in the format of each section separated by a forward slash. For example:
+
+```StoryTeller.TestRail.Sync.exe --projectid myProjectId --username "username" --password "password" --testrailurl "https://yourproject.testrail.net" --specsfolder "C:\MySystem\Specs" --basesectionpath "My System/Sub System"```
