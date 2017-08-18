@@ -17,6 +17,7 @@ namespace StoryTeller.TestRail.Sync
         public string SpecsFolder { get; private set; }
         public string CredentialsFile { get; private set; }
         public bool PurgeTestRail { get; private set; }
+        public string BaseSectionPath { get; private set; }
 
         public TestRailSyncSettingsFromArgs(string[] args)
         {
@@ -42,6 +43,9 @@ namespace StoryTeller.TestRail.Sync
             parser.Setup<string>("specsfolder")
                 .Callback(value => SpecsFolder = value)
                 .Required();
+
+            parser.Setup<string>("BaseSectionPath")
+                .Callback(value => BaseSectionPath = value);
 
             parser.Setup<bool>("purge")
                 .Callback(purge => PurgeTestRail = purge)

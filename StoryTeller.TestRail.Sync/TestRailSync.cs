@@ -41,7 +41,19 @@ namespace StoryTeller.TestRail.Sync
             {
                 _logger.Verbose("Processing spec {SpecName}", spec.name);
 
-                List<Section> suiteSections = CreateSectionsFromSuitePath(spec.SuitePath()).ToList();
+                var suitePath = spec.SuitePath();
+
+                if (!string.IsNullOrEmpty(_settings.BaseSectionPath))
+                {
+                    var basePath = _settings.BaseSectionPath;
+
+                    if (!basePath.EndsWith("/"))
+                        basePath += "/";
+
+                    suitePath = basePath + suitePath;
+                }
+
+                List<Section> suiteSections = CreateSectionsFromSuitePath(suitePath).ToList();
 
                 ProcessSuitePath(sections, suiteSections);
 

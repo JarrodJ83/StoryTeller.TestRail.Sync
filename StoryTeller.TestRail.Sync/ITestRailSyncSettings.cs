@@ -9,5 +9,6 @@
         string SpecsFolder { get; }
         string CredentialsFile { get; }
         bool PurgeTestRail { get; }
+        string BaseSectionPath { get; }
     }
 }
