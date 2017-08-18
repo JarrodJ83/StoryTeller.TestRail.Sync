@@ -13,9 +13,9 @@ namespace StoryTeller.TestRail.Sync
     {
         private readonly ILogger _logger;
         private readonly ITestRailSyncSettings _settings;
-        private readonly APIClient _testRailClient;
+        private readonly TestRailSyncClient _testRailClient;
 
-        public TestRailSync(ILogger logger, ITestRailSyncSettings settings, APIClient testRailClient)
+        public TestRailSync(ILogger logger, ITestRailSyncSettings settings, TestRailSyncClient testRailClient)
         {
             _logger = logger;
             _settings = settings;

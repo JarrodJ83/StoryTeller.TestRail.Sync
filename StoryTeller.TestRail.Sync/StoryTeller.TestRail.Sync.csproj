@@ -115,9 +115,10 @@
     <Compile Include="ITestRailSyncSettings.cs" />
     <Compile Include="TestRailClient\AddSectionRequest.cs" />
     <Compile Include="TestRailClient\Case.cs" />
-    <Compile Include="TestRailClient\APIClient.cs" />
+    <Compile Include="TestRailClient\TestRailSyncClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRailClient\ITestRailSyncClient.cs" />
     <Compile Include="TestRailClient\Section.cs" />
     <Compile Include="TestRailSync.cs" />
     <Compile Include="TestRailSyncSettingsFromArgs.cs" />

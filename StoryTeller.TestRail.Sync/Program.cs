@@ -14,7 +14,7 @@ namespace StoryTeller.TestRail.Sync
     
         private static ILogger Logger { get; set; }
        
-        private static APIClient TestRailClient;
+        private static TestRailSyncClient TestRailClient;
 
         static void Main(string[] args)
         {
@@ -27,7 +27,7 @@ namespace StoryTeller.TestRail.Sync
                     .CreateLogger();
                 var settings = new TestRailSyncSettingsFromArgs(args);
 
-                var testRailClient = new APIClient(settings.TestRailUrl);
+                var testRailClient = new TestRailSyncClient(settings.TestRailUrl);
 
                 testRailClient.User = settings.Username;
                 testRailClient.Password = settings.Password;

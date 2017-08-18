@@ -11,13 +11,13 @@ using Newtonsoft.Json.Linq;
 
 namespace StoryTeller.TestRail.Sync.TestRailClient
 {
-    public class APIClient
+    public class TestRailSyncClient : ITestRailSyncClient
     {
         private string m_user;
         private string m_password;
         private string m_url;
 
-        public APIClient(string base_url)
+        public TestRailSyncClient(string base_url)
         {
             if (!base_url.EndsWith("/"))
             {
@@ -48,6 +48,52 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
             get { return this.m_password; }
             set { this.m_password = value; }
         }
+
+
+        #region ITestRailSyncClient
+
+        public List<Case> GetCases(int projectId)
+        {
+            object result = SendGet($"get_cases/{projectId}");
+
+            return JsonConvert.DeserializeObject<List<Case>>(result.ToString());
+        }
+
+        public List<Section> GetSections(int projectId)
+        {
+            object getSectionsResponse = SendGet($"get_sections/{projectId}");
+            return JsonConvert.DeserializeObject<List<Section>>(getSectionsResponse.ToString());
+        }
+
+        public Case AddCase(Case testCase)
+        {
+            object response = SendPost($"add_case/{testCase.section_id}", testCase);
+
+            return JsonConvert.DeserializeObject<Case>(response.ToString());
+        }
+
+        public Section AddSection(AddSectionRequest request)
+        {
+            object response = SendPost($"add_section/{request.ProjectId}", request.Section);
+            return JsonConvert.DeserializeObject<Section>(response.ToString());
+        }
+
+        public void DeleteCase(int caseId)
+        {
+            SendPost($"delete_case/{caseId}", null);
+        }
+
+        public void DeleteSection(int sectionId)
+        {
+            SendPost($"delete_section/{sectionId}", null);
+        }
+
+        public void UpdateCase(Case testCase)
+        {
+            SendPost($"update_case/{testCase.id}", testCase);
+        }
+
+        #endregion
 
         /**
          * Send Get
@@ -195,47 +241,6 @@ namespace StoryTeller.TestRail.Sync.TestRailClient
             }
 
             return result;
-        }
-
-        public List<Case> GetCases(int projectId)
-        {
-            object result = SendGet($"get_cases/{projectId}");
-
-            return JsonConvert.DeserializeObject<List<Case>>(result.ToString());
-        }
-
-        public List<Section> GetSections(int projectId)
-        {
-            object getSectionsResponse = SendGet($"get_sections/{projectId}");
-            return JsonConvert.DeserializeObject<List<Section>>(getSectionsResponse.ToString());
-        }
-
-        public Case AddCase(Case testCase)
-        {
-            object response = SendPost($"add_case/{testCase.section_id}", testCase);
-
-            return JsonConvert.DeserializeObject<Case>(response.ToString());
-        }
-
-        public Section AddSection(AddSectionRequest request)
-        {
-            object response = SendPost($"add_section/{request.ProjectId}", request.Section);
-            return JsonConvert.DeserializeObject<Section>(response.ToString());
-        }
-
-        public void DeleteCase(int caseId)
-        {
-            SendPost($"delete_case/{caseId}", null);
-        }
-
-        public void DeleteSection(int sectionId)
-        {
-            SendPost($"delete_section/{sectionId}", null);
-        }
-
-        public void UpdateCase(Case testCase)
-        {
-            SendPost($"update_case/{testCase.id}", testCase);
         }
     }
 }
