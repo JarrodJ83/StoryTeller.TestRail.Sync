@@ -1,5 +1,5 @@
 # StoryTeller.TestRail.Sync
-Small utility to keep your StoryTeller Specs in sync with your TestRail Cases. At this point the tool is very basic and simply meant to operate in "add or update" mode.
+Small utility to keep your StoryTeller Specs in sync with your TestRail Cases. At this point the tool is very basic and simply meant to operate in "add or update" mode. Currently the sync is unidirectional from StoryTeller Specs to TestRail Cases.
 
 ## Usage
 The following steps will help you sync your local StoryTeller specs to your TestRail project.
